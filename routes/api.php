@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Http\Request;
@@ -25,3 +26,24 @@ Route::post("/login", [LoginController::class, 'login']);
 Route::post("/logout", [LoginController::class, 'logout']);
 
 Route::get("/abilities", [App\Http\Controllers\AbilitiesController::class, 'index']);
+
+//Auth routes group
+Route::prefix('auth')->middleware('auth')->group(function() {
+
+    //Admin routes
+    Route::prefix('articles')->group(function () {
+
+        // URL: /auth/articles
+        Route::post("/create", [ArticleController::class, 'create']);
+    });
+
+});
+
+
+//Front (No-auth) routes group
+Route::prefix('front')->group(function () {
+
+    // URL: /front/articles
+    Route::get("/articles", [ArticleController::class, 'index']);
+
+});
