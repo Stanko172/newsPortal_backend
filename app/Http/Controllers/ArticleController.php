@@ -84,4 +84,28 @@ class ArticleController extends Controller
 
         
    }
+
+    public function index_by_views(){
+        $articles = $this->index();
+
+        $articles = $articles->sortByDesc('views')->values();
+
+        return $articles;
+    }
+
+    public function index_by_recommended(){
+        $articles = $this->index();
+
+        $articles = $articles->filter(
+            function ($article){
+
+                if($article['recommended'] === 1){
+                    return $article;
+                }
+            }
+        );
+
+
+        return $articles->values();
+    }
 }

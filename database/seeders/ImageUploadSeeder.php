@@ -16,7 +16,7 @@ class ImageUploadSeeder extends Seeder
     public function run()
     {
 
-        for($i = 1; $i <= 50; $i++){
+        for($i = 63; $i <= 112; $i++){
             $imageUpload = new ImageUpload();
             $imageUpload->name = Str::random(20);
             $imageUpload->path = "/storage/uploads/" . strval(rand(1, 20)) . ".jpg";

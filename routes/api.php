@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Http\Request;
@@ -43,7 +44,10 @@ Route::prefix('auth')->middleware('auth')->group(function() {
 //Front (No-auth) routes group
 Route::prefix('front')->group(function () {
 
-    // URL: /front/articles
+    // URL: /front/...
     Route::get("/articles", [ArticleController::class, 'index']);
+    Route::get("/articles/views", [ArticleController::class, 'index_by_views']);
+    Route::get("/articles/recommended", [ArticleController::class, 'index_by_recommended']);
+    Route::get("/categories", [CategoryController::class, 'index']);
 
 });
