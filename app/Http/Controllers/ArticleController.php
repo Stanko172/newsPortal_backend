@@ -14,6 +14,14 @@ class ArticleController extends Controller
         
         $articles = $articles->getCollection()->transform(
             function ($article){
+                $title_image = "";
+
+                foreach($article->image_uploads as $image){
+                    if($image->is_title_image === 1){
+                        $title_image = $image;
+                    }
+                }
+
                 return collect([
                     'id' => $article->id,
                     'title' => $article->title,
@@ -22,11 +30,14 @@ class ArticleController extends Controller
                     'category' => $article->category->name,
                     'views' => $article->views,
                     'recommended' => $article->recommended,
+                    'title_image' => $title_image,
                     'images' => $article->image_uploads,
                     'created_at' => date_format(date_create($article->created_at), 'Y-m-d H:i:s')
                 ])->all();
             }
         );
+
+
 
         return $articles;
     }
