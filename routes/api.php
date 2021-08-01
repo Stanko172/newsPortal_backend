@@ -45,9 +45,7 @@ Route::prefix('auth')->middleware('auth')->group(function() {
 Route::prefix('front')->group(function () {
 
     // URL: /front/...
-    Route::get("/articles", [ArticleController::class, 'index']);
-    Route::get("/articles/views", [ArticleController::class, 'index_by_views']);
-    Route::get("/articles/recommended", [ArticleController::class, 'index_by_recommended']);
+    Route::post("/articles", [ArticleController::class, 'index']);
     Route::get("/categories", [CategoryController::class, 'index']);
 
 });

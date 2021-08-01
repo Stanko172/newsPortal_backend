@@ -6,11 +6,25 @@ use App\Models\Article;
 use App\Models\ImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 class ArticleController extends Controller
 {
-    public function index(){
-        $articles = Article::with('author', 'category', 'image_uploads')->paginate(13);
+    public function index(Request $request){
+        switch($request->payload){
+            case 'Najnovije':
+                $articles = Article::with('author', 'category', 'image_uploads')->paginate(14);
+                break;
+            
+            case 'Najčitanije':
+                $articles = Article::orderBy('views', 'DESC')->with('author', 'category', 'image_uploads')->paginate(14);
+                break;
+            
+            case 'Preporučeno':
+                $articles = Article::orderBy('recommended', 'DESC')->with('author', 'category', 'image_uploads')->paginate(14);
+                break;
+            
+        }
         
         $articles = $articles->getCollection()->transform(
             function ($article){
@@ -25,13 +39,11 @@ class ArticleController extends Controller
                 return collect([
                     'id' => $article->id,
                     'title' => $article->title,
-                    'body' => $article->body,
                     'author' => $article->author->name,
                     'category' => $article->category->name,
                     'views' => $article->views,
                     'recommended' => $article->recommended,
                     'title_image' => $title_image,
-                    'images' => $article->image_uploads,
                     'created_at' => date_format(date_create($article->created_at), 'Y-m-d H:i:s')
                 ])->all();
             }
@@ -84,28 +96,4 @@ class ArticleController extends Controller
 
         
    }
-
-    public function index_by_views(){
-        $articles = $this->index();
-
-        $articles = $articles->sortByDesc('views')->values();
-
-        return $articles;
-    }
-
-    public function index_by_recommended(){
-        $articles = $this->index();
-
-        $articles = $articles->filter(
-            function ($article){
-
-                if($article['recommended'] === 1){
-                    return $article;
-                }
-            }
-        );
-
-
-        return $articles->values();
-    }
 }
