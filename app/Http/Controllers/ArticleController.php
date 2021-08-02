@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Category;
 use App\Models\ImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 
 class ArticleController extends Controller
 {
     public function index(Request $request){
         switch($request->payload){
             case 'Najnovije':
-                $articles = Article::with('author', 'category', 'image_uploads')->paginate(14);
+                $articles = Article::with('author', 'category', 'image_uploads')->paginate(16);
                 break;
             
             case 'Najčitanije':
@@ -28,7 +28,7 @@ class ArticleController extends Controller
         
         $articles = $articles->getCollection()->transform(
             function ($article){
-                $title_image = "";
+                $title_image = null;
 
                 foreach($article->image_uploads as $image){
                     if($image->is_title_image === 1){
@@ -93,7 +93,71 @@ class ArticleController extends Controller
         }else{
             return response()->json(['error' => "Couldn\'t save article!"], 500);
         }
+ 
+    }
 
-        
-   }
+    public function show(Request $request){
+        $category_id = Category::select('id')->where('name', $request->category_name)->first()->id;
+        switch($request->tab){
+            case 'Najnovije':
+                $articles = Article::select('id', 'title', 'created_at')->with('image_uploads')->where('category_id', $category_id)->simplePaginate(9);
+                break;
+            
+            case 'Najčitanije':
+                $articles = Article::orderBy('views', 'DESC')->with('image_uploads')->where('category_id', $category_id)->simplePaginate(9);
+                break;
+            
+            case 'Preporučeno':
+                $articles = Article::orderBy('recommended', 'DESC')->with('image_uploads')->where('category_id', $category_id)->simplePaginate(9);
+            
+        }
+
+        //$articles = Article::select('id', 'title')->with('image_uploads')->where('category_id', $category_id)->simplePaginate(9);
+
+        $articles->transform(function ($article){
+            $title_image = null;
+
+            foreach($article->image_uploads as $image){
+                if($image->is_title_image === 1){
+                    $title_image = $image;
+                }
+            }
+
+            return collect([
+                'id' => $article->id,
+                'title' => $article->title,
+                'title_image' => $title_image->path,
+                'created_at' => date_format(date_create($article->created_at), 'Y-m-d H:i:s')
+            ]);
+        });
+
+        return $articles->values();
+
+    }
+
+    public function get_interviews(){
+        $interviews = Article::where('category_id', '4')
+        ->with('category', 'image_uploads')
+        ->take(4)
+        ->get();
+
+        $interviews->transform(function ($interview){
+            $title_image = null;
+
+            foreach($interview->image_uploads as $image){
+                if($image->is_title_image === 1){
+                    $title_image = $image;
+                }
+            }
+            return collect(
+                [
+                    'title' => $interview->title,
+                    'title_image' => $title_image->path,
+                    'created_at' => date_format(date_create($interview->created_at), 'Y-m-d H:i:s')
+                ]
+                );
+        });
+
+        return $interviews;
+    }
 }
