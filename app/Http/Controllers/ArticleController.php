@@ -160,4 +160,39 @@ class ArticleController extends Controller
 
         return $interviews;
     }
+
+    public function search_articles(Request $request){
+        $str_search = $request->str_search;
+        $articles = Article::select('id', 'title', 'body', 'created_at')->with('image_uploads')->where(function($query) use ($str_search)
+        {
+            $columns = ['title', 'body'];
+
+            foreach ($columns as $column)
+            {
+                $query->orWhere($column, 'LIKE', '%'.$str_search.'%');
+            }
+        })
+        ->orderBy('updated_at', 'desc')                            
+        ->get();
+
+        $articles->transform(function ($articles){
+            $title_image = null;
+
+            foreach($articles->image_uploads as $image){
+                if($image->is_title_image === 1){
+                    $title_image = $image;
+                }
+            }
+            return collect(
+                [
+                    'title' => $articles->title,
+                    'body' => $articles->body,
+                    'title_image' => $title_image->path,
+                    'created_at' => date_format(date_create($articles->created_at), 'Y-m-d H:i:s')
+                ]
+                );
+        });
+
+        return $articles;
+    }
 }
