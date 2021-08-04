@@ -100,15 +100,15 @@ class ArticleController extends Controller
         $category_id = Category::select('id')->where('name', $request->category_name)->first()->id;
         switch($request->tab){
             case 'Najnovije':
-                $articles = Article::select('id', 'title', 'created_at')->with('image_uploads')->where('category_id', $category_id)->simplePaginate(9);
+                $articles = Article::with('image_uploads', 'category')->where('category_id', $category_id)->simplePaginate(9);
                 break;
             
             case 'Najčitanije':
-                $articles = Article::orderBy('views', 'DESC')->with('image_uploads')->where('category_id', $category_id)->simplePaginate(9);
+                $articles = Article::orderBy('views', 'DESC')->with('image_uploads', 'category')->where('category_id', $category_id)->simplePaginate(9);
                 break;
             
             case 'Preporučeno':
-                $articles = Article::orderBy('recommended', 'DESC')->with('image_uploads')->where('category_id', $category_id)->simplePaginate(9);
+                $articles = Article::orderBy('recommended', 'DESC')->with('image_uploads', 'category')->where('category_id', $category_id)->simplePaginate(9);
             
         }
 
@@ -127,6 +127,7 @@ class ArticleController extends Controller
                 'id' => $article->id,
                 'title' => $article->title,
                 'title_image' => $title_image->path,
+                'category' => $article->category->name,
                 'created_at' => date_format(date_create($article->created_at), 'Y-m-d H:i:s')
             ]);
         });
@@ -194,5 +195,22 @@ class ArticleController extends Controller
         });
 
         return $articles;
+    }
+
+    public function show_article(Request $request){
+        $article = Article::with('category', 'image_uploads', 'author')->where('id', $request->id)->first();
+
+        $title_image = null;
+
+        foreach($article->image_uploads as $image){
+            if($image->is_title_image === 1){
+                $title_image = $image;
+            }
+        }
+
+        $article->title_image = $title_image->path;
+
+        return $article;
+        
     }
 }

@@ -48,6 +48,7 @@ Route::prefix('front')->group(function () {
     Route::post("/articles", [ArticleController::class, 'index']);
     Route::post("/articles/show", [ArticleController::class, 'show']);
     Route::post("/articles/search", [ArticleController::class, 'search_articles']);
+    Route::post("/articles/article/show", [ArticleController::class, 'show_article']);
     Route::get("/categories", [CategoryController::class, 'index']);
     Route::get("/interviews", [ArticleController::class, 'get_interviews']);
 
