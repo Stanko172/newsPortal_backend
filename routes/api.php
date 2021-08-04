@@ -51,5 +51,7 @@ Route::prefix('front')->group(function () {
     Route::post("/articles/article/show", [ArticleController::class, 'show_article']);
     Route::get("/categories", [CategoryController::class, 'index']);
     Route::get("/interviews", [ArticleController::class, 'get_interviews']);
+    Route::post("/comments/show", [App\Http\Controllers\CommentController::class, 'show']);
+    
 
 });

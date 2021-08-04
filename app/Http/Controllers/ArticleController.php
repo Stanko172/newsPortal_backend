@@ -209,6 +209,7 @@ class ArticleController extends Controller
         }
 
         $article->title_image = $title_image->path;
+        $article->article_created_at = date_format(date_create($article->created_at), 'Y-m-d H:i:s');
 
         return $article;
         
