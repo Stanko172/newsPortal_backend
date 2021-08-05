@@ -8,7 +8,7 @@ use App\Models\Comment;
 class CommentController extends Controller
 {
     public function show(Request $request){
-        $comments = Comment::where('article_id', $request->id)->with('replies', 'user')->get();
+        $comments = Comment::where('article_id', $request->id)->with('replies', 'user', 'likes', 'dislikes')->get();
 
         $comments->transform(function ($comment){
             $comment->replies_hehe = count($comment->replies);
@@ -16,8 +16,8 @@ class CommentController extends Controller
             return collect([
                 'content' => $comment->content,
                 'author' => $comment->user->name,
-                'likes' => $comment->likes,
-                'dislikes' => $comment->dislikes,
+                'likes' => count($comment->likes),
+                'dislikes' => count($comment->dislikes),
                 'created_at' => date_format(date_create($comment->created_at), 'Y-m-d H:i:s'),
                 'updated_at' => date_format(date_create($comment->updated_at), 'Y-m-d H:i:s'),
                 'replies_num' => count($comment->replies)
