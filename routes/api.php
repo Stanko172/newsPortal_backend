@@ -53,6 +53,8 @@ Route::prefix('front')->group(function () {
     Route::get("/interviews", [ArticleController::class, 'get_interviews']);
     Route::post("/comments/index", [App\Http\Controllers\CommentController::class, 'index']);
     Route::post("/comments/show", [App\Http\Controllers\CommentController::class, 'show']);
+    Route::post("/comments/create", [App\Http\Controllers\CommentController::class, 'create']);
+    Route::post("/comments/delete", [App\Http\Controllers\CommentController::class, 'delete']);
 
     Route::middleware('auth:sanctum')->post("/likes/create", [App\Http\Controllers\LikesController::class, 'create']);
     Route::middleware('auth:sanctum')->post("/likes/delete", [App\Http\Controllers\LikesController::class, 'delete']);

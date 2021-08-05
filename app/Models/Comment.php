@@ -17,7 +17,7 @@ class Comment extends Model
         'content',
         'likes',
         'dislikes',
-        'user_id'
+        'user_id',
     ];
 
     public function replies(){
