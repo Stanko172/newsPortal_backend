@@ -45,12 +45,12 @@ Route::prefix('auth')->middleware('auth')->group(function() {
 Route::prefix('front')->group(function () {
 
     // URL: /front/...
-    Route::post("/articles", [ArticleController::class, 'index']);
-    Route::post("/articles/show", [ArticleController::class, 'show']);
-    Route::post("/articles/search", [ArticleController::class, 'search_articles']);
-    Route::post("/articles/article/show", [ArticleController::class, 'show_article']);
-    Route::get("/categories", [CategoryController::class, 'index']);
-    Route::get("/interviews", [ArticleController::class, 'get_interviews']);
+    Route::post("/articles", [App\Http\Controllers\ArticleController::class, 'index']);
+    Route::post("/articles/show", [App\Http\Controllers\ArticleController::class, 'show']);
+    Route::post("/articles/search", [App\Http\Controllers\ArticleController::class, 'search_articles']);
+    Route::post("/articles/article/show", [App\Http\Controllers\ArticleController::class, 'show_article']);
+    Route::get("/categories", [App\Http\Controllers\CategoryController::class, 'index']);
+    Route::get("/interviews", [App\Http\Controllers\ArticleController::class, 'get_interviews']);
     Route::post("/comments/index", [App\Http\Controllers\CommentController::class, 'index']);
     Route::post("/comments/show", [App\Http\Controllers\CommentController::class, 'show']);
     Route::post("/comments/create", [App\Http\Controllers\CommentController::class, 'create']);
@@ -60,6 +60,12 @@ Route::prefix('front')->group(function () {
     Route::middleware('auth:sanctum')->post("/likes/delete", [App\Http\Controllers\LikesController::class, 'delete']);
     Route::middleware('auth:sanctum')->post("/dislikes/create", [App\Http\Controllers\DislikesController::class, 'create']);
     Route::middleware('auth:sanctum')->post("/dislikes/delete", [App\Http\Controllers\DislikesController::class, 'delete']);
-    
+    Route::post("/replies/show", [App\Http\Controllers\RepliesController::class, 'show']);
+    Route::post("/replies/delete", [App\Http\Controllers\RepliesController::class, 'delete']);
+    Route::post("/replies/create", [App\Http\Controllers\RepliesController::class, 'create']);
+    Route::middleware('auth:sanctum')->post("/rlikes/create", [App\Http\Controllers\RlikesController::class, 'create']);
+    Route::middleware('auth:sanctum')->post("/rlikes/delete", [App\Http\Controllers\RlikesController::class, 'delete']);
+    Route::middleware('auth:sanctum')->post("/rdislikes/create", [App\Http\Controllers\RdislikesController::class, 'create']);
+    Route::middleware('auth:sanctum')->post("/rdislikes/delete", [App\Http\Controllers\RdislikesController::class, 'delete']);
 
 });
