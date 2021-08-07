@@ -8,6 +8,8 @@ use App\Models\Like;
 use App\Models\Rdislike;
 use App\Models\Reply;
 use App\Models\Rlike;
+use App\Models\User;
+use App\Notifications\CommentReplied;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -82,6 +84,12 @@ class RepliesController extends Controller
         $reply->comment_id = $request->comment_id;
 
         if($reply->save()){
+            //Stvaranje obavijesti za korisnika da je napravljen odgovor na njegov komentar
+            $comment = Comment::find($reply->comment_id);
+            $user_comment = User::where('id', $comment->user_id)->first();
+            $user_reply = User::where('id', $reply->user_id)->first();
+            $user_comment->notify( new CommentReplied($comment, $user_reply) );
+
             return response()->json(['Success' => 'Reply created'], 200);
         }else{
             return response()->json(['Error' => 'Error while creating reply.'], 500);
