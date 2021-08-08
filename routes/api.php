@@ -71,5 +71,6 @@ Route::prefix('front')->group(function () {
     Route::middleware('auth:sanctum')->post("/notifications", [App\Http\Controllers\NotificationsController::class, 'index']);
     Route::middleware('auth:sanctum')->post("/notifications/status", [App\Http\Controllers\NotificationsController::class, 'edit']);
     Route::middleware('auth:sanctum')->post("/notifications/delete", [App\Http\Controllers\NotificationsController::class, 'delete']);
+    Route::middleware('auth:sanctum')->get("/notifications/unread_num", [App\Http\Controllers\NotificationsController::class, 'unread_num']);
 
 });
