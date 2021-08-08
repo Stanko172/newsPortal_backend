@@ -68,4 +68,8 @@ Route::prefix('front')->group(function () {
     Route::middleware('auth:sanctum')->post("/rdislikes/create", [App\Http\Controllers\RdislikesController::class, 'create']);
     Route::middleware('auth:sanctum')->post("/rdislikes/delete", [App\Http\Controllers\RdislikesController::class, 'delete']);
 
+    Route::middleware('auth:sanctum')->post("/notifications", [App\Http\Controllers\NotificationsController::class, 'index']);
+    Route::middleware('auth:sanctum')->post("/notifications/status", [App\Http\Controllers\NotificationsController::class, 'edit']);
+    Route::middleware('auth:sanctum')->post("/notifications/delete", [App\Http\Controllers\NotificationsController::class, 'delete']);
+
 });

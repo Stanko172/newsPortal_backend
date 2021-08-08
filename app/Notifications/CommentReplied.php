@@ -61,7 +61,7 @@ class CommentReplied extends Notification
     {
         return [
             "comment" => $this->comment,
-            "message" => "Korisnik " . $this->user_reply->name . " je odgovorio na komentar." 
+            "message" => $this->user_reply->name . " je odgovorio na komentar." 
         ];
     }
 }
