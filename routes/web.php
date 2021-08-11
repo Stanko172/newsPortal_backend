@@ -1,5 +1,7 @@
 <?php
 
+use App\Events\CommentReplied;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +17,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/broadcast', function () {
+    broadcast(new CommentReplied("hahaha", User::find(1)));
 });

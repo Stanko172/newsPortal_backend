@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CommentReplied as EventsCommentReplied;
 use App\Models\Comment;
 use App\Models\Dislike;
 use App\Models\Like;
@@ -89,6 +90,11 @@ class RepliesController extends Controller
             $user_comment = User::where('id', $comment->user_id)->first();
             $user_reply = User::where('id', $reply->user_id)->first();
             $user_comment->notify( new CommentReplied($comment, $user_reply) );
+
+            //Odašiljanje događaja
+            $msg = "Korisnik " . $user_reply->name . " je odgovorio na Vaš komentar.";
+            broadcast(new EventsCommentReplied($msg, $user_comment));
+            
 
             return response()->json(['Success' => 'Reply created'], 200);
         }else{
