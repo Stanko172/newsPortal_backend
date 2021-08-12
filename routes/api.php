@@ -29,9 +29,12 @@ Route::post("/logout", [LoginController::class, 'logout']);
 Route::get("/abilities", [App\Http\Controllers\AbilitiesController::class, 'index']);
 
 //Auth routes group
-Route::prefix('auth')->middleware('auth')->group(function() {
+//Vratiti middleware('auth') naknadno
+Route::prefix('admin')->group(function() {
 
     //Admin routes
+    Route::get("/dashboard/index", [App\Http\Controllers\admin\DashboardController::class, 'index']);
+
     Route::prefix('articles')->group(function () {
 
         // URL: /auth/articles
@@ -72,5 +75,7 @@ Route::prefix('front')->group(function () {
     Route::middleware('auth:sanctum')->post("/notifications/status", [App\Http\Controllers\NotificationsController::class, 'edit']);
     Route::middleware('auth:sanctum')->post("/notifications/delete", [App\Http\Controllers\NotificationsController::class, 'delete']);
     Route::middleware('auth:sanctum')->get("/notifications/unread_num", [App\Http\Controllers\NotificationsController::class, 'unread_num']);
+
+
 
 });
