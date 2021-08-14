@@ -49,8 +49,6 @@ class ArticleController extends Controller
             }
         );
 
-
-
         return $articles;
     }
 
