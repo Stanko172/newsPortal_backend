@@ -7,10 +7,68 @@ use App\Models\Article;
 use App\Models\Category;
 use App\Models\ImageUpload;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
+    public function create(Request $request){
+        $article = new Article();
+        $article->title = $request->title;
+        $article->body = $request->body;
+        $article->recommended = $request->recommended;
+        $article->views = 0;
+        $article->category_id = Category::where('name', $request->category_name)->first()->id;
+        $article->user_id = Auth::user()->id;
+
+        $upload_one = true;
+        $upload_two = true;
+
+        if($article->save()){
+            if($request->hasFile('file')) {
+                $file_name = time().'_'.$request->file->getClientOriginalName();
+                $file_path = $request->file('file')->storeAs('uploads', $file_name, 'public');
+    
+                $fileUpload = new ImageUpload();
+                $fileUpload->name = time().'_'.$request->file->getClientOriginalName();
+                $fileUpload->path = '/storage/' . $file_path;
+                $fileUpload->article_id = $article->id;
+                $fileUpload->is_title_image = 1;
+    
+                if($fileUpload->save()){
+                   $upload_one = true;
+                }else{
+                    $upload_one = false;
+                }
+    
+            }
+            if($request->hasfile('files')){
+                foreach($request->file('files') as $key=>$file)
+                {
+                    $file_name = time().'_'.$request->file->getClientOriginalName();
+                    $file_path = $request->file('file')->storeAs('uploads', $file_name, 'public');
+        
+                    $fileUpload = new ImageUpload();
+                    $fileUpload->name = time().'_'.$request->file->getClientOriginalName();
+                    $fileUpload->path = '/storage/' . $file_path;
+                    $fileUpload->article_id = $article->id;
+                    $fileUpload->is_title_image = 0;
+
+                    if($fileUpload->save()){
+                        $upload_two = true;
+                    }else{
+                        $upload_two = false;
+                    }
+                }
+            }
+
+            if($upload_one == true && $upload_two == true){
+                return response()->json(['success' => $article], 200);
+            }
+        }
+        
+    }
+
     public function show(Request $request){
         $article = Article::where('id', $request->id)->with('image_uploads')->first();
 
@@ -32,8 +90,6 @@ class ArticleController extends Controller
     }
 
     public function update(Request $request){
-        $article = new Article();
-
         $article = Article::where('id', $request->id)->first();
         $article->title = $request->title;
         $article->body = $request->body;

@@ -38,6 +38,8 @@ Route::prefix('admin')->group(function() {
     Route::post("/articles/delete", [App\Http\Controllers\admin\ArticlesController::class, 'delete']);
     Route::post("/article/update", [App\Http\Controllers\admin\ArticleController::class, 'update']);
     Route::get("/article/show", [App\Http\Controllers\admin\ArticleController::class, 'show']);
+    Route::post("/article/create", [App\Http\Controllers\admin\ArticleController::class, 'create']);
+    Route::get("/categories", [App\Http\Controllers\admin\CategoriesController::class, 'index']);
 
     Route::prefix('articles')->group(function () {
 
