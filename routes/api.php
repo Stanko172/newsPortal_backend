@@ -40,6 +40,9 @@ Route::prefix('admin')->group(function() {
     Route::get("/article/show", [App\Http\Controllers\admin\ArticleController::class, 'show']);
     Route::post("/article/create", [App\Http\Controllers\admin\ArticleController::class, 'create']);
     Route::get("/categories", [App\Http\Controllers\admin\CategoriesController::class, 'index']);
+    Route::get("/permissions", [App\Http\Controllers\admin\PermissionsController::class, 'index']);
+    Route::post("/permissions/save", [App\Http\Controllers\admin\PermissionsController::class, 'save']);
+    Route::post("/permissions/delete", [App\Http\Controllers\admin\PermissionsController::class, 'delete']);
 
     Route::prefix('articles')->group(function () {
 
