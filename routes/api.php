@@ -47,6 +47,10 @@ Route::prefix('admin')->group(function() {
     Route::post("/roles/save", [App\Http\Controllers\admin\RolesController::class, 'save']);
     Route::post("/roles/delete", [App\Http\Controllers\admin\RolesController::class, 'delete']);
     Route::post("/roles/edit", [App\Http\Controllers\admin\RolesController::class, 'edit']);
+    Route::get("/users", [App\Http\Controllers\admin\UsersController::class, 'index']);
+    Route::post("/users/save", [App\Http\Controllers\admin\UsersController::class, 'save']);
+    Route::post("/users/delete", [App\Http\Controllers\admin\UsersController::class, 'delete']);
+    Route::post("/users/edit", [App\Http\Controllers\admin\UsersController::class, 'edit']);
 
     Route::prefix('articles')->group(function () {
 
