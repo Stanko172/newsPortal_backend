@@ -18,10 +18,8 @@ class NotificationsController extends Controller
                 break;
             
             case 'read':
-                $notifications = Auth::user()->notifications;
-                return $notifications->filter(function ($notification){
-                    return $notification->read_at != null;
-                });
+                $notifications = Auth::user()->notifications->where('read_at', '!=', null)->flatten();
+                return $notifications;
                 break;
         }
         
