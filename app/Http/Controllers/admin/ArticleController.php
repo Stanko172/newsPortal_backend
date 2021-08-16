@@ -45,11 +45,11 @@ class ArticleController extends Controller
             if($request->hasfile('files')){
                 foreach($request->file('files') as $key=>$file)
                 {
-                    $file_name = time().'_'.$request->file->getClientOriginalName();
-                    $file_path = $request->file('file')->storeAs('uploads', $file_name, 'public');
+                    $file_name = time().'_'.$file->getClientOriginalName();
+                    $file_path = $file->storeAs('uploads', $file_name, 'public');
         
                     $fileUpload = new ImageUpload();
-                    $fileUpload->name = time().'_'.$request->file->getClientOriginalName();
+                    $fileUpload->name = time().'_'.$file->getClientOriginalName();
                     $fileUpload->path = '/storage/' . $file_path;
                     $fileUpload->article_id = $article->id;
                     $fileUpload->is_title_image = 0;
