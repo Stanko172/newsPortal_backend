@@ -18,7 +18,7 @@ class ArticlesController extends Controller
         ->join('categories', 'articles.category_id', '=', 'categories.id')
         ->join('users', 'articles.user_id', '=', 'users.id')
         ->select('articles.*', 'categories.name as category_name', 'users.name as user_name')
-        ->orderBy('articles.id', 'asc')
+        ->orderBy('articles.id', 'desc')
         ->paginate($request->paginate);
         $articles_count = DB::table('articles')->selectRaw('count(*) as articles_count')->pluck('articles_count')->first();
         //Naknadno prepraviti na samo one koji imaju rolu pisca ili urednika
