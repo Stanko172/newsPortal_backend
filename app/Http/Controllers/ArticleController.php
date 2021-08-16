@@ -198,6 +198,10 @@ class ArticleController extends Controller
     public function show_article(Request $request){
         $article = Article::with('category', 'image_uploads', 'author')->where('id', $request->id)->first();
 
+        //Povećanje broja pregleda za jedan
+        $article->views += 1;
+        $article->save();
+
         $title_image = null;
 
         foreach($article->image_uploads as $image){
