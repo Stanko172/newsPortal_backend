@@ -51,6 +51,9 @@ Route::prefix('admin')->group(function() {
     Route::post("/users/save", [App\Http\Controllers\admin\UsersController::class, 'save']);
     Route::post("/users/delete", [App\Http\Controllers\admin\UsersController::class, 'delete']);
     Route::post("/users/edit", [App\Http\Controllers\admin\UsersController::class, 'edit']);
+    Route::get("/categories/all", [App\Http\Controllers\admin\CategoriesController::class, 'all']);
+    Route::post("/categories/save", [App\Http\Controllers\admin\CategoriesController::class, 'save']);
+    Route::post("/categories/delete", [App\Http\Controllers\admin\CategoriesController::class, 'delete']);
 
     Route::prefix('articles')->group(function () {
 
