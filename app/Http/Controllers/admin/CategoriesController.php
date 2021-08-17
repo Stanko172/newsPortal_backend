@@ -31,8 +31,8 @@ class CategoriesController extends Controller
     }
 
     public function delete(Request $request){
-        $permisson = Category::find($request->id);
-        if($permisson->delete()){
+        $category = Category::find($request->id);
+        if($category->delete()){
             return response()->json(['success' => "Category deleted."], 200);
         }else{
             return response()->json(['error' => "Category is not deleted."], 500);

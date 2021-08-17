@@ -54,6 +54,8 @@ Route::prefix('admin')->group(function() {
     Route::get("/categories/all", [App\Http\Controllers\admin\CategoriesController::class, 'all']);
     Route::post("/categories/save", [App\Http\Controllers\admin\CategoriesController::class, 'save']);
     Route::post("/categories/delete", [App\Http\Controllers\admin\CategoriesController::class, 'delete']);
+    Route::get("/comments", [App\Http\Controllers\admin\CommentsController::class, 'index']);
+    Route::post("/comments/delete", [App\Http\Controllers\admin\CommentsController::class, 'delete']);
 
     Route::prefix('articles')->group(function () {
 
