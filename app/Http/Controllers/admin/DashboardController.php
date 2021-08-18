@@ -8,10 +8,15 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Gate;
 
 class DashboardController extends Controller
 {
     public function index(){
+        if (! Gate::allows('dashboard_access')) {
+            abort(403);
+        }
+
         $articles_num = DB::table('articles')->count();
         $views_num = (int) DB::table('articles')->sum('articles.views');
         $comments_num = DB::table('comments')->count();

@@ -5,10 +5,15 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PermissionsController extends Controller
 {
     public function index(){
+        if (! Gate::allows('users_manage_access')) {
+            abort(403);
+        }
+
         return Permission::all();
     }
 

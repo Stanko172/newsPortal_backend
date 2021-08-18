@@ -5,14 +5,23 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class CategoriesController extends Controller
 {
     public function index(){
+        if (! Gate::allows('categories_access')) {
+            abort(403);
+        }
+
         return Category::select('name')->get()->pluck('name');
     }
 
     public function all(){
+        if (! Gate::allows('categories_access')) {
+            abort(403);
+        }
+
         return Category::all();
     }
 

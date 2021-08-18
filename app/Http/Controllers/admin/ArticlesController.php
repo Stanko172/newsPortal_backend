@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\DB;
 class ArticlesController extends Controller
 {
     public function index(Request $request){
+        if (! Gate::allows('articles_access')) {
+            abort(403);
+        }
+
         $articles = DB::table('articles')
         ->join('categories', 'articles.category_id', '=', 'categories.id')
         ->join('users', 'articles.user_id', '=', 'users.id')
