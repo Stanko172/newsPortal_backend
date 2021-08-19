@@ -6,10 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class RolesController extends Controller
 {
     public function index(){
+        if (! Gate::allows('users_manage_access')) {
+            abort(403);
+        }
+
         $roles = Role::with('permissions')->get();
 
         return $roles;

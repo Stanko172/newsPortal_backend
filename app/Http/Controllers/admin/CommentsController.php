@@ -5,10 +5,15 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class CommentsController extends Controller
 {
     public function index(){
+        if (! Gate::allows('comments_access')) {
+            abort(403);
+        }
+
         return Comment::with('user')->get();
     }
 

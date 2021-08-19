@@ -150,6 +150,8 @@ class ArticleController extends Controller
             }
             return collect(
                 [
+                    'id' => $interview->id,
+                    'category' => $interview->category->name,
                     'title' => $interview->title,
                     'title_image' => $title_image->path,
                     'created_at' => date_format(date_create($interview->created_at), 'Y-m-d H:i:s')
